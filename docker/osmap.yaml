@@ -7,4 +7,30 @@ FreeBSD:
   pip:
     pkgname: devel/py-pip
 
-# vim: ft=sls
+Ubuntu:
+  repo:
+    url_base: https://download.docker.com/linux/{{ grains['os'] |lower }}
+    key_url: https://download.docker.com/linux/{{ grains['os'] |lower }}/gpg
+    version: {{ grains['oscodename'] |lower }}
+    file: /etc/apt/sources.list.d/docker.list
+
+Debian:
+  repo:
+    url_base: https://download.docker.com/linux/{{ grains['os'] |lower }}
+    key_url: https://download.docker.com/linux/{{ grains['os'] |lower }}/gpg
+    version: {{ grains['oscodename'] |lower }}
+    file: /etc/apt/sources.list.d/docker.list
+
+Raspbian:
+  repo:
+    url_base: https://download.docker.com/linux/{{ grains['os_family'] |lower }}
+    key_url: https://download.docker.com/linux/{{ grains['os_family'] |lower }}/gpg
+    version: {{ grains['oscodename'] |lower }}
+    file: /etc/apt/sources.list.d/docker.list
+
+RedHat:
+  repo:
+    url_base: https://download.docker.com/linux/{{ grains['os'] |lower }}/{{ grains['osmajorrelease'] }}/$basearch/stable/
+    key_url: https://download.docker.com/linux/{{ grains['os'] |lower }}/gpg
+    version: {{ grains['oscodename'] |lower }}
+    file: /etc/yum.repos.d/docker-ce.repo

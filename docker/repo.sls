@@ -5,22 +5,14 @@
   {% set repo_state = 'managed' %}
 {% endif %}
 
-{% set humanname_old = 'Old ' if docker.use_old_repo else '' %}
-
-{%- if grains['os']|lower in ('debian', 'ubuntu',) %}
-{% set url = 'https://apt.dockerproject.org/repo ' ~ grains["os"]|lower ~ '-' ~ grains["oscodename"] ~ ' main' if docker.use_old_repo else docker.repo.url_base ~ ' ' ~ docker.repo.version ~ ' stable' %}
+{%- if grains['os_family']|lower in ('debian') %}
 
 docker package repository:
   pkgrepo.{{ repo_state }}:
-    - humanname: {{ grains["os"] }} {{ grains["oscodename"]|capitalize }} {{ humanname_old }}Docker Package Repository
-    - name: deb {{ url }}
+    - humanname: {{ grains["os"] }} {{ grains["oscodename"]|capitalize }} Docker Package Repository
+    - name: deb {{ docker.repo.url_base ~ ' ' ~ docker.repo.version ~ ' stable' }}
     - file: {{ docker.repo.file }}
-    {% if docker.use_old_repo %}
-    - keyserver: keyserver.ubuntu.com
-    - keyid: 58118E89F3A912897C070ADBF76221572C52609D
-    {% else %}
     - key_url: {{ docker.repo.key_url }}
-    {% endif %}
     - refresh_db: True
     - require_in:
       - pkg: docker package
